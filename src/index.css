@@ -92,7 +92,7 @@ summary {
     font-size: 75%;
     border: 1px solid #ddd;
     padding: 0.2rem 0.3rem;
-    cursor: pointer;
+    cursor: default;
     background-color: transparent;
     &.active {
       background-color: #e6eaef;
@@ -113,7 +113,7 @@ summary {
   .study-card__summary {
     padding-left: 2.5rem;
     text-indent: -1.5rem;
-    cursor: pointer;
+    cursor: default;
   }
   max-width: 100%;
   .study-card__details {
@@ -137,6 +137,7 @@ pre {
 
 #variable-filters {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
   .box {
     font-size: 75%;
@@ -148,9 +149,9 @@ pre {
 #variables-list {
   flex-wrap: nowrap;
   overflow-y: auto;
-  max-height: calc(100vh - 106px);
   align-items: stretch;
   flex: 0 0 400px;
+  max-height: calc(100vh - 300px);
   .result-card {
     display: flex;
     padding: 0.5rem;
