@@ -32,7 +32,7 @@ const StudyCard = ({ study }) => {
       </Box>
       <Box className="study-card__details" style={{ display: open ? 'block' : 'none' }}>
         { details ? <pre>{JSON.stringify(details, null, 2)}</pre> : 'Loading...' }
-        <Link to={study.c_link}>{study.c_id}</Link>
+        <Box><Link to={study.c_link}>{study.c_id}</Link></Box>
       </Box>
     </div>
   );
