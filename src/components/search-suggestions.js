@@ -1,6 +1,4 @@
 import PropTypes from 'prop-types';
-import { useDug } from 'dug';
-import { Box } from '@components/box';
 
 export const SearchSuggestions = ({ onClick }) => {
 
