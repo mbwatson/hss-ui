@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDug } from 'dug';
 import { Box } from '@components/box';
 import { Link } from '@components/link';
 import { Tag } from '@components/tag';
@@ -7,19 +8,33 @@ import { Tag } from '@components/tag';
 //
 
 const StudyCard = ({ study }) => {
+  const { findStudy } = useDug();
+  const [details, setDetails] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open || Boolean(details)) { return; }
+
+    const getDetails = async () => {
+      const results = await findStudy(study.c_id);
+      if (!results) { return; }
+      setDetails(results);
+    };
+    getDetails();
+  }, [open]);
+
+  useEffect(() => console.log(details), [details]);
+
   return (
-    <details key={`study-${study.c_id}`} className="study-card">
-      <summary className="box">{study.c_name}</summary>
-      <Box className="study-details">
-        <Link to={study.c_link}>{study.c_id}</Link><br />
-        <p>
-          <strong>Abstract:</strong>{' '}
-          Lorem ipsum excepteur nulla do labore proident pariatur consectetur dolor ex labore.
-          Amet dolor ut non id enim consequat elit mollit nisi excepteur nulla duis laborum officia nostrud velit.
-          Voluptate qui id veniam do reprehenderit duis eiusmod irure laborum nisi.
-        </p>
+    <div className="study-card">
+      <Box className="study-card__summary" onClick={() => setOpen(!open)}>
+        { open ? 'v' : '>' }&nbsp;&nbsp;{study.c_name}
       </Box>
-    </details>
+      <Box className="study-card__details" style={{ display: open ? 'block' : 'none' }}>
+        { details ? <pre>{JSON.stringify(details, null, 2)}</pre> : 'Loading...' }
+        <Link to={study.c_link}>{study.c_id}</Link>
+      </Box>
+    </div>
   );
 }
 
