@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export const Box = ({ children, className, ...props }) => {
   return (
-    <div className={ `box ${ className }` } { ...props }>
+    <div className={ `box ${ className ?? '' }` } { ...props }>
       { children }
     </div>
   )

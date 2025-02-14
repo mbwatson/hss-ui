@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { createRequests } from'./requests';
 import { UrlPropType } from './prop-types';
@@ -33,8 +33,10 @@ export const DugProvider = ({
     fetchConcepts,
     fetchKg,
     fetchStudies,
+    fetchStudy,
     fetchVariables,
   } = createRequests(config);
+
 
   const handleRequest = async (fetchFunction, params = {}) => {
     setLoading(true);
@@ -65,24 +67,32 @@ export const DugProvider = ({
     return query ? handleRequest(fetchStudies, { query, concept: conceptId }) : [];
   };
 
+  const findStudy = async (study_id) => {
+    const query = extractQuery(inputRef);
+    return query ? handleRequest(fetchStudy, { study_id }) : [];
+  };
+
   const searchVariables = async (conceptId) => {
     const query = extractQuery(inputRef);
     return query ? handleRequest(fetchVariables, { query, concept: conceptId }) : [];
   };
 
+  const provided = useMemo(() => ({
+    config,
+    error,
+    inputRef,
+    loading,
+    searchConcepts,
+    searchKg,
+    searchStudies,
+    findStudy,
+    searchVariables,
+  }), []);
+
   return (
-    <DugContext
-      value={{
-        config,
-        error,
-        inputRef,
-        loading,
-        searchConcepts,
-        searchKg,
-        searchStudies,
-        searchVariables,
-      }}
-    >{ children }</DugContext>
+    <DugContext value={provided}>
+      { children }
+    </DugContext>
   );
 };
 

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 export const Debug = ({ title, data }) => {
-  console.log(`DEBUG`, data);
+  // console.log(`DEBUG`, data);
   
   return (
     <details className="debug">

@@ -22,7 +22,6 @@ export const App = () => {
     try {
       const results = await searchStudies();
       if (!results) return;
-      console.log(results);
 
       const groups = { cde: {}, nonCde: {}, variables: [] };
       Object.entries(results).forEach(([key, resultsList]) => {

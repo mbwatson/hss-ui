@@ -1,7 +1,9 @@
+import { useCallback } from 'react';
+
 export const createRequests = (config) => {
   const baseUrl = config.baseUrl.replace(/\/$/, '');
 
-  const fetchConcepts = ({ query, page, pageSize }) => {
+  const fetchConcepts = useCallback(({ query, page, pageSize }) => {
     return fetch(`${baseUrl}/search`, {
         method: 'POST',
         headers: {
@@ -25,9 +27,9 @@ export const createRequests = (config) => {
         }
         throw new Error('Invalid response structure');
       });
-  };
+  }, []);
 
-  const fetchKg = async ({ query, uniqueId, size = 100 }) => {
+  const fetchKg = useCallback(async ({ query, uniqueId, size = 100 }) => {
     const payload = { query, unique_id: uniqueId, index: 'kg_index', size };
 
     return fetch(`${baseUrl}/search_kg`, {
@@ -35,9 +37,9 @@ export const createRequests = (config) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     }).then(res => res.json());
-  };
+  }, []);
 
-  const fetchVariables = async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
+  const fetchVariables = useCallback(async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
     if (!query) {
       return Promise.resolve([]); // Skip request if query is empty
     }
@@ -72,9 +74,9 @@ export const createRequests = (config) => {
       console.error('fetchVariables error:', error);
       throw error;
     }
-  };
+  }, []);
 
-  const fetchStudies = async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
+  const fetchStudies = useCallback(async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
     if (!query) {
       return Promise.resolve([]); // Skip request if query is empty
     }
@@ -109,12 +111,39 @@ export const createRequests = (config) => {
       console.error('fetchStudies error:', error);
       throw error;
     }
+  }, []);
+
+  const fetchStudy = async ({ study_id }) => {
+    const url = `${baseUrl}/search_study?study_id=${study_id}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Fetch failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        return data?.result?.hits?.hits ?? [];
+      }
+
+      throw new Error('Invalid API response structure');
+    } catch (error) {
+      console.error('fetchStudies error:', error);
+      throw error;
+    }
   };
 
   return {
     fetchConcepts,
     fetchKg,
     fetchStudies,
+    fetchStudy,
     fetchVariables,
   };
 };
