@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import { createContext, useContext, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { createRequests } from'./requests';
 import { UrlPropType } from './prop-types';
