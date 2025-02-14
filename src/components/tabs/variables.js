@@ -125,7 +125,7 @@ const VariableCard = ({ variable }) => {
         { open ? 'v' : '>' }&nbsp;&nbsp;{variable.name}
       </Box>
       <Box className="variable-card__details" style={{ display: open ? 'block' : 'none' }}>
-        <Box>
+        <Box noBorder>
           <Link to={variable.e_link}>{variable.id}</Link><br />
           <em>Score: <span>{variable.score}</span></em>
         </Box>

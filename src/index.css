@@ -42,6 +42,9 @@ main {
 .box {
   padding: 1rem;
   border: 1px solid #ddd;
+  .no-border {
+    border-width: 0;
+  }
 }
 
 summary {
