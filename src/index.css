@@ -163,7 +163,7 @@ pre {
   overflow-y: auto;
   align-items: stretch;
   flex: 0 0 400px;
-  max-height: calc(100vh - 300px);
+  max-height: calc(100vh - 24rem);
   .result-card {
     display: flex;
     padding: 0.5rem;
