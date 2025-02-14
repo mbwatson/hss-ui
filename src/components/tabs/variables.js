@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useWindowWidth } from '@hooks';
 import { Box } from '@components/box';
 import { Link } from '@components/link';
 
@@ -25,7 +26,7 @@ const Instructions = () => (
   </div>
 );
 
-export const Variables = ({ variables = [] }) => {
+const VariablesDesktop = ({ variables = [] }) => {
   const [activeVariable, setActiveVariable] = useState(null);
   const [sorting, setSorting] = useState('ALPHABETICAL');
   // orders: 0=none, 1=descending, 2=ascending
@@ -115,6 +116,52 @@ export const Variables = ({ variables = [] }) => {
   );
 };
 
+const VariableCard = ({ variable }) => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="result-card variable-card">
+      <Box className="variable-card__summary" onClick={() => setOpen(!open)}>
+        { open ? 'v' : '>' }&nbsp;&nbsp;{variable.name}
+      </Box>
+      <Box className="variable-card__details" style={{ display: open ? 'block' : 'none' }}>
+        <Box>
+          <Link to={variable.e_link}>{variable.id}</Link><br />
+          <em>Score: <span>{variable.score}</span></em>
+        </Box>
+        <pre className="box">{JSON.stringify(variable, null, 2)}</pre>
+      </Box>
+    </div>
+  );
+}
+
+VariableCard.propTypes = {
+  variable: PropTypes.object.isRequired,
+};
+
+const VariablesMobile = ({ variables = [] }) => {
+  const VariablesList = useCallback(() => variables.map(variable => (
+    <VariableCard
+      key={`var-${variable.id}`}
+      variable={ variable }
+    />
+  )), []);
+  return (
+    <Box id="results">
+      <VariablesList />
+    </Box>
+  );
+};
+
+export const Variables = ({ variables = [] }) => {
+  const width = useWindowWidth();
+  return width < 1000
+    ? <VariablesMobile variables={ variables } />
+    : <VariablesDesktop variables={ variables } />
+};
+
 Variables.propTypes = {
   variables: PropTypes.array.isRequired,
 };
+VariablesDesktop.propTypes = Variables.propTypes;
+VariablesMobile.propTypes = Variables.propTypes;

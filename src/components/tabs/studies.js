@@ -31,8 +31,8 @@ const StudyCard = ({ study }) => {
         { open ? 'v' : '>' }&nbsp;&nbsp;{study.c_name}
       </Box>
       <Box className="study-card__details" style={{ display: open ? 'block' : 'none' }}>
+        {study.c_id && <Box><Link to={study.c_link}>{study.c_id}</Link></Box>}
         { details ? <pre>{JSON.stringify(details, null, 2)}</pre> : 'Loading...' }
-        <Box><Link to={study.c_link}>{study.c_id}</Link></Box>
       </Box>
     </div>
   );

@@ -140,6 +140,26 @@ summary {
   }
 }
 
+.variable-card {
+  overflow-x: hidden;
+  .variable-card__summary {
+    padding-left: 2.5rem;
+    text-indent: -1.5rem;
+    cursor: default;
+  }
+  max-width: 100%;
+  .variable-card__details {
+    border-top-width: 0;
+    overflow-y: auto;
+    padding: 0;
+    pre {
+      padding: 0.5rem;
+      background-color: #eee;
+      max-height: 200px;
+    }
+  }
+}
+
 pre {
   margin: 0;
   font-size: 75%;
