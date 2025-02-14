@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useDug } from 'dug';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SemanticSearchForm } from '@components/search-form';
+import { SearchSuggestions } from '@components/search-suggestions';
+import { Box } from '@components/box';
 import { Debug } from '@components/debug';
 import { Drawer } from '@components/drawer';
 import { Studies, Variables, RelatedConcepts } from '@components/tabs';
@@ -9,7 +11,7 @@ import { Studies, Variables, RelatedConcepts } from '@components/tabs';
 //
 
 export const App = () => {
-  const { searchStudies } = useDug();
+  const { inputRef, searchStudies } = useDug();
   const [studies, setStudies] = useState({});
   const [cdes, setCdes] = useState({});
   const [variables, setVariables] = useState([]);
@@ -20,6 +22,7 @@ export const App = () => {
     setLoading(true);
 
     try {
+      console.log(inputRef.current.value)
       const results = await searchStudies();
       if (!results) return;
 
@@ -43,12 +46,20 @@ export const App = () => {
     }
   };
 
+  const handleClickSuggestion = query => event => {
+    inputRef.current.value = query;
+    handleClickSearch(event);
+  }
+
   return (
     <main>
       <h1>HSS Home</h1>
 
       {/* Search form */}
-      <SemanticSearchForm submitHandler={handleClickSearch} />
+      <Box>
+        <SemanticSearchForm submitHandler={handleClickSearch} />
+        <SearchSuggestions onClick={handleClickSuggestion} />
+      </Box>
 
       {/* Loading state */}
       {loading && <div>Loading...</div>}

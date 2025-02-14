@@ -67,6 +67,18 @@ summary {
   }
 }
 
+#search-suggestions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1rem 0 0 0;
+  gap: 0.5rem;
+  font-size: 80%;
+  button {
+    padding: 0.25rem 1rem;
+  }
+}
+
 #tabs {
   display: flex;
   gap: 0.5rem;
