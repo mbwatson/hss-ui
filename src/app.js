@@ -53,18 +53,20 @@ export const App = () => {
 
   return (
     <main>
-      <h1>HSS Home</h1>
+      <h1 style={{ marginBottom: 0 }}>
+        Semantic Search
+      </h1>
 
-      {/* Search form */}
+      {/* search form */}
       <Box>
         <SemanticSearchForm submitHandler={handleClickSearch} />
         <SearchSuggestions onClick={handleClickSuggestion} />
       </Box>
 
-      {/* Loading state */}
+      {/* loading state */}
       {loading && <div>Loading...</div>}
 
-      {/* Display results */}
+      {/* results */}
       {!loading && (
         <TabGroup>
           <TabList id="tabs">
@@ -90,4 +92,3 @@ export const App = () => {
     </main>
   );
 };
-

@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
 
-export const Box = ({ children, className, noBorder = false, ...props }) => {
+export const Box = ({
+  children,
+  className = '',
+  noBorder = false,
+  ...props
+}) => {
+  const classes = ['box', ...className.split(' ')];
+  Boolean(noBorder) && classes.push('no-border');
   return (
-    <div
-      className={ `box ${ className ?? '' } ${ noBorder ? 'no-border' : '' }` }
-      { ...props }
-    >
+    <div className={ classes.join(' ') } { ...props }>
       { children }
     </div>
   )
@@ -16,4 +20,3 @@ Box.propTypes = {
   className: PropTypes.string,
   noBorder: PropTypes.bool,
 };
-

@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDug } from 'dug';
 import { Box } from '@components/box';
+import { Accordion } from '@components/accordion';
 import { Link } from '@components/link';
 import { Tag } from '@components/tag';
 
@@ -10,31 +11,18 @@ import { Tag } from '@components/tag';
 const StudyCard = ({ study }) => {
   const { findStudy } = useDug();
   const [details, setDetails] = useState(null);
-  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (!open || Boolean(details)) { return; }
-
-    const getDetails = async () => {
-      const results = await findStudy(study.c_id);
-      if (!results) { return; }
-      setDetails(results);
-    };
-    getDetails();
-  }, [open]);
-
-  useEffect(() => console.log(details), [details]);
+  const getDetails = async () => {
+    const results = await findStudy(study.c_id);
+    if (!results) { return 'Error loading study details'; }
+    setDetails(results);
+  };
 
   return (
-    <div className="study-card">
-      <Box className="study-card__summary" onClick={() => setOpen(!open)}>
-        { open ? 'v' : '>' }&nbsp;&nbsp;{study.c_name}
-      </Box>
-      <Box className="study-card__details" style={{ display: open ? 'block' : 'none' }}>
-        {study.c_id && <Box noBorder><Link to={study.c_link}>{study.c_id}</Link></Box>}
-        { details ? <pre>{JSON.stringify(details, null, 2)}</pre> : 'Loading...' }
-      </Box>
-    </div>
+    <Accordion title={study.c_name} onOpen={ getDetails }>
+      {study.c_id && <Box noBorder><Link to={study.c_link}>{study.c_id}</Link></Box>}
+      <pre>{ details ? JSON.stringify(details, null, 2) : 'Loading...' }</pre>
+    </Accordion>
   );
 }
 

@@ -1,18 +1,17 @@
-import { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
 //
 
 export const ExternalLink = ({ to, children }) => {
   return (
-    <Fragment>
+    <span>
       <a
         href={ to }
         target="_blank"
         rel="noopener noreferrer"
       >{ children }</a>
       <ExternalLinkIcon />
-    </Fragment>
+    </span>
   )
 }
 

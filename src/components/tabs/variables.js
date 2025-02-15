@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useWindowWidth } from '@hooks';
 import { Box } from '@components/box';
 import { Link } from '@components/link';
+import { Accordion } from '@components/accordion';
 
 const sortings = {
   ALPHABETICAL: 'ALPHABETICAL',
@@ -117,21 +118,14 @@ const VariablesDesktop = ({ variables = [] }) => {
 };
 
 const VariableCard = ({ variable }) => {
-  const [open, setOpen] = useState(false);
-
   return (
-    <div className="result-card variable-card">
-      <Box className="variable-card__summary" onClick={() => setOpen(!open)}>
-        { open ? 'v' : '>' }&nbsp;&nbsp;{variable.name}
+    <Accordion title={variable.name}>
+      <Box noBorder>
+        <Link to={variable.e_link}>{variable.id}</Link><br />
+        <em>Score: <span>{variable.score}</span></em>
       </Box>
-      <Box className="variable-card__details" style={{ display: open ? 'block' : 'none' }}>
-        <Box noBorder>
-          <Link to={variable.e_link}>{variable.id}</Link><br />
-          <em>Score: <span>{variable.score}</span></em>
-        </Box>
-        <pre className="box">{JSON.stringify(variable, null, 2)}</pre>
-      </Box>
-    </div>
+      <pre className="box">{JSON.stringify(variable, null, 2)}</pre>
+    </Accordion>
   );
 }
 
@@ -155,7 +149,7 @@ const VariablesMobile = ({ variables = [] }) => {
 
 export const Variables = ({ variables = [] }) => {
   const width = useWindowWidth();
-  return width < 1000
+  return width < 900
     ? <VariablesMobile variables={ variables } />
     : <VariablesDesktop variables={ variables } />
 };

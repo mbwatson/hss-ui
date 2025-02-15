@@ -5,7 +5,7 @@ function subscribe(callback) {
     window.addEventListener('resize', callback);
     return () => window.removeEventListener('resize', callback);
   }
-  return () => {}; // No-op in non-browser environments
+  return () => {}; // no-op in non-browser environments
 }
 
 function getSnapshot() {
