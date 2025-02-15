@@ -53,14 +53,14 @@ const VariablesDesktop = ({ variables = [] }) => {
     if (order === 2) { // descending
       return variables.sort((v, w) => v[sortKey(sorting)] < w[sortKey(sorting)] ? -1 : 1);
     }
-    return variables;
+    return variables.sort((v, w) => v.name < w.name ? -1 : 1);;
   }, [order, sorting, variables]);
 
   const VariableFilters = useCallback(() => {
     return (
       <div id="variable-filters">
         <span>Sort by:</span>
-        <button className="box" onClick={handleClickSortButton('GROUP_BY_STUDY')}>
+        <button className="box" onClick={handleClickSortButton('GROUP_BY_STUDY')} disabled>
           Study &nbsp;&nbsp;
           {(sorting !== sortings.GROUP_BY_STUDY || order === 0) ? ' ' : order === 1 ? 'v' : '^'}
         </button>
@@ -68,7 +68,7 @@ const VariablesDesktop = ({ variables = [] }) => {
           Score &nbsp;&nbsp;
           {(sorting !== sortings.SORT_BY_SCORE || order === 0) ? ' ' : order === 1 ? 'v' : '^'}
         </button>
-        <button className="box" onClick={handleClickSortButton('SORT_BY_SOURCE')}>
+        <button className="box" onClick={handleClickSortButton('SORT_BY_SOURCE')} disabled>
           Source &nbsp;&nbsp;
           {(sorting !== sortings.SORT_BY_SOURCE || order === 0) ? ' ' : order === 1 ? 'v' : '^'}
         </button>

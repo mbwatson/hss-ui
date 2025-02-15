@@ -40,7 +40,7 @@ export const SearchSuggestions = ({ onClick }) => {
         <button
           className="box refresh-button"
           onClick={handleClickRefresh}
-        >🗘</button>&nbsp;Sample queries:
+        >🗘</button>&nbsp;&nbsp;Sample queries:
       </em>
       {
         randomSuggestions.map(s => (

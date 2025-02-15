@@ -84,11 +84,15 @@ export const App = () => {
         </TabGroup>
       )}
 
-      <Drawer title="Debug" active={ true }>
-        <Debug title="Studies" data={studies} />
-        <Debug title="CDEs" data={cdes} />
-        <Debug title="Variables" data={variables} />
-      </Drawer>
+      {
+        process.env.NODE_ENV !== 'production' && (
+          <Drawer title="Debug" active={ true }>
+            <Debug title="Studies" data={studies} />
+            <Debug title="CDEs" data={cdes} />
+            <Debug title="Variables" data={variables} />
+          </Drawer>
+        )
+      }
     </main>
   );
 };
