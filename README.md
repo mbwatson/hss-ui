@@ -46,5 +46,5 @@ image:
 
 Deploy.
 ```
-helm install hss-ui ./chart/ -n comms
+helm upgrade --install hss-ui ./chart/ -n comms
 ```

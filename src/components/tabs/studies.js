@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Debug } from 'debugger';
 import { useDug } from 'dug';
 import { Box } from '@components/box';
+import { Stack } from '@components/stack';
 import { Accordion } from '@components/accordion';
 import { Link } from '@components/link';
 import { Tag } from '@components/tag';
+import { CopyButton } from '@components/copy-button';
+import { getDomain } from '@util';
 
 //
 
@@ -20,8 +24,15 @@ const StudyCard = ({ study }) => {
 
   return (
     <Accordion title={study.c_name} onOpen={ getDetails }>
-      {study.c_id && <Box noBorder><Link to={study.c_link}>{study.c_id}</Link></Box>}
-      <pre>{ details ? JSON.stringify(details, null, 2) : 'Loading...' }</pre>
+      {study.c_id && (
+        <Stack box noBorder justify="space-between">
+          <Stack>
+            <strong>ID:</strong> {study.c_id} <CopyButton text={study.c_id} />
+          </Stack>
+          <Link to={study.c_link}>{getDomain(study.c_link)}</Link>
+        </Stack>
+      )}
+      <Debug data={ details ? { study, details } : 'Loading...' } />
     </Accordion>
   );
 }

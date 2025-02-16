@@ -1,20 +1,19 @@
 import { useState } from 'react';
 import { useDug } from 'dug';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { SemanticSearchForm } from '@components/search-form';
-import { SearchSuggestions } from '@components/search-suggestions';
+import { SemanticSearchForm } from '@components/form';
+import { SearchSuggestions } from '@components/suggestions';
 import { Box } from '@components/box';
-import { Debug } from '@components/debug';
-import { Drawer } from '@components/drawer';
 import { Studies, Variables, RelatedConcepts } from '@components/tabs';
 
 //
 
 export const App = () => {
-  const { inputRef, searchStudies } = useDug();
+  const { inputRef, searchConcepts, searchStudies } = useDug();
   const [studies, setStudies] = useState({});
   const [cdes, setCdes] = useState({});
   const [variables, setVariables] = useState([]);
+  const [concepts, setConcepts] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleClickSearch = async event => {
@@ -22,7 +21,6 @@ export const App = () => {
     setLoading(true);
 
     try {
-      console.log(inputRef.current.value)
       const results = await searchStudies();
       if (!results) return;
 
@@ -39,6 +37,11 @@ export const App = () => {
       setCdes(groups.cde);
       setStudies(groups.nonCde);
       setVariables(groups.variables);
+
+      const conceptResults = await searchConcepts();
+      if (!conceptResults) return;
+
+      setConcepts(conceptResults);
     } catch (error) {
       console.error('Error fetching studies:', error);
     } finally {
@@ -78,21 +81,11 @@ export const App = () => {
           <TabPanels>
             <TabPanel><Studies studies={studies} /></TabPanel>
             <TabPanel><Studies studies={cdes} /></TabPanel>
-            <TabPanel><RelatedConcepts concepts={[]} /></TabPanel>
+            <TabPanel><RelatedConcepts concepts={concepts} /></TabPanel>
             <TabPanel><Variables variables={variables} /></TabPanel>
           </TabPanels>
         </TabGroup>
       )}
-
-      {
-        process.env.NODE_ENV !== 'production' && (
-          <Drawer title="Debug" active={ true }>
-            <Debug title="Studies" data={studies} />
-            <Debug title="CDEs" data={cdes} />
-            <Debug title="Variables" data={variables} />
-          </Drawer>
-        )
-      }
     </main>
   );
 };

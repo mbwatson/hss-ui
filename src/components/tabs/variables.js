@@ -1,9 +1,13 @@
 import { Fragment, useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Debug } from 'debugger';
 import { useWindowWidth } from '@hooks';
 import { Box } from '@components/box';
+import { Stack } from '@components/stack';
 import { Link } from '@components/link';
 import { Accordion } from '@components/accordion';
+import { CopyButton } from '@components/copy-button';
+import { getDomain } from '@util';
 
 const sortings = {
   ALPHABETICAL: 'ALPHABETICAL',
@@ -27,7 +31,7 @@ const Instructions = () => (
   </div>
 );
 
-const VariablesDesktop = ({ variables = [] }) => {
+const VariablesForDesktop = ({ variables = [] }) => {
   const [activeVariable, setActiveVariable] = useState(null);
   const [sorting, setSorting] = useState('ALPHABETICAL');
   // orders: 0=none, 1=descending, 2=ascending
@@ -59,7 +63,7 @@ const VariablesDesktop = ({ variables = [] }) => {
   const VariableFilters = useCallback(() => {
     return (
       <div id="variable-filters">
-        <span>Sort by:</span>
+        <span className="label">Sort by:</span>
         <button className="box" onClick={handleClickSortButton('GROUP_BY_STUDY')} disabled>
           Study &nbsp;&nbsp;
           {(sorting !== sortings.GROUP_BY_STUDY || order === 0) ? ' ' : order === 1 ? 'v' : '^'}
@@ -77,28 +81,39 @@ const VariablesDesktop = ({ variables = [] }) => {
   }, [order, sorting]);
 
   const VariablesList = useCallback(() => sortedVariables.map(variable => (
-    <Box
-      key={`var-${variable.id}`}
-      className="result-card"
-    >
-      <Box className="var-details">
+    <Box key={`var-${variable.id}`} className="result-card">
+      <Stack column className="var-details">
         <strong>{variable.name}</strong><br />
-        <Link to={variable.e_link}>{variable.id}</Link><br />
+        <Stack>
+          <span><strong>ID:</strong> {variable.id}</span>
+          <CopyButton text={variable.id} />
+        </Stack>
+        <Link to={variable.e_link}>{getDomain(variable.e_link)}</Link><br />
         <em>Score: <span>{variable.score}</span></em>
-      </Box>
+      </Stack>
       <button className="box" onClick={ handleClickVariable(variable) }>»</button>
     </Box>
   )), [order, sorting]);
 
   const ActiveVariableDetails = useCallback(() => (
     <Fragment>
-      <button className="box" onClick={ handleClickVariable(null) }>✕</button>
-      <Fragment>
-        <h2>{ activeVariable.name }</h2>
-        <strong>Description:</strong>
-        <p>{ activeVariable.description }</p>
-        <pre className="box">{JSON.stringify(activeVariable, null, 2)}</pre>
-      </Fragment>
+      <button
+        className="box close-button"
+        onClick={ handleClickVariable(null) }
+      >✕</button>
+      
+      <h2 style={{ marginTop: 0 }}>{ activeVariable.name }</h2>
+      
+      <Stack>
+        <span><strong>ID:</strong> { activeVariable.id }</span>
+        <CopyButton text={activeVariable.id} />
+      </Stack>
+      
+      <br />
+      <strong>Description:</strong> { activeVariable.description }
+      
+      <br /><br />
+      <Debug data={ activeVariable } />
     </Fragment>
   ), [activeVariable]);
 
@@ -117,29 +132,30 @@ const VariablesDesktop = ({ variables = [] }) => {
   );
 };
 
-const VariableCard = ({ variable }) => {
+const VariableAccordionCard = ({ variable }) => {
   return (
     <Accordion title={variable.name}>
-      <Box noBorder>
-        <Link to={variable.e_link}>{variable.id}</Link><br />
+      <Stack box noBorder justify="space-between">
+        <Stack>
+          <strong>ID:</strong> {variable.id} <CopyButton text={variable.id} />
+        </Stack>
+        <Link to={variable.e_link}>{getDomain(variable.e_link)}</Link>
         <em>Score: <span>{variable.score}</span></em>
-      </Box>
-      <pre className="box">{JSON.stringify(variable, null, 2)}</pre>
+      </Stack>
+      <Debug data={ variable } />
     </Accordion>
   );
 }
 
-VariableCard.propTypes = {
+VariableAccordionCard.propTypes = {
   variable: PropTypes.object.isRequired,
 };
 
-const VariablesMobile = ({ variables = [] }) => {
+const VariablesForMobile = ({ variables = [] }) => {
   const VariablesList = useCallback(() => variables.map(variable => (
-    <VariableCard
-      key={`var-${variable.id}`}
-      variable={ variable }
-    />
+    <VariableAccordionCard key={`var-${variable.id}`} variable={ variable } />
   )), []);
+
   return (
     <Box id="results">
       <VariablesList />
@@ -150,12 +166,12 @@ const VariablesMobile = ({ variables = [] }) => {
 export const Variables = ({ variables = [] }) => {
   const width = useWindowWidth();
   return width < 900
-    ? <VariablesMobile variables={ variables } />
-    : <VariablesDesktop variables={ variables } />
+    ? <VariablesForMobile variables={ variables } />
+    : <VariablesForDesktop variables={ variables } />
 };
 
 Variables.propTypes = {
   variables: PropTypes.array.isRequired,
 };
-VariablesDesktop.propTypes = Variables.propTypes;
-VariablesMobile.propTypes = Variables.propTypes;
+VariablesForDesktop.propTypes = Variables.propTypes;
+VariablesForMobile.propTypes = Variables.propTypes;

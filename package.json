@@ -45,6 +45,7 @@
     "regenerator-runtime": "^0.14.1"
   },
   "workspaces": [
-    "dug"
+    "dug",
+    "debugger"
   ]
 }

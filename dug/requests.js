@@ -1,14 +1,10 @@
-import { useCallback } from 'react';
-
 export const createRequests = (config) => {
   const baseUrl = config.baseUrl.replace(/\/$/, '');
 
-  const fetchConcepts = useCallback(({ query, page, pageSize }) => {
+  const fetchConcepts = ({ query, page, pageSize }) => {
     return fetch(`${baseUrl}/search`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, page, pageSize }),
       })
       .then((response) => {
@@ -18,28 +14,22 @@ export const createRequests = (config) => {
         throw new Error('Failed to fetch concepts');
       })
       .then((data) => {
-        if (data.status === 'success' && data.result) {
-          return {
-            hits: data.result?.hits?.hits ?? [],
-            total_items: data.result.total_items,
-            concept_types: data.result.concept_types,
-          };
+        if (data.status === 'success') {
+          return data?.result?.hits?.hits ?? [];
         }
         throw new Error('Invalid response structure');
       });
-  }, []);
+  };
 
-  const fetchKg = useCallback(async ({ query, uniqueId, size = 100 }) => {
-    const payload = { query, unique_id: uniqueId, index: 'kg_index', size };
-
+  const fetchKg = async ({ query, uniqueId, size = 100 }) => {
     return fetch(`${baseUrl}/search_kg`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ query, unique_id: uniqueId, index: 'kg_index', size }),
     }).then(res => res.json());
-  }, []);
+  };
 
-  const fetchVariables = useCallback(async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
+  const fetchVariables = async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
     if (!query) {
       return Promise.resolve([]); // Skip request if query is empty
     }
@@ -74,9 +64,9 @@ export const createRequests = (config) => {
       console.error('fetchVariables error:', error);
       throw error;
     }
-  }, []);
+  };
 
-  const fetchStudies = useCallback(async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
+  const fetchStudies = async ({ query, concept = '', page = 1, pageSize = 1000 }) => {
     if (!query) {
       return Promise.resolve([]); // Skip request if query is empty
     }
@@ -111,7 +101,7 @@ export const createRequests = (config) => {
       console.error('fetchStudies error:', error);
       throw error;
     }
-  }, []);
+  };
 
   const fetchStudy = async ({ study_id }) => {
     const url = `${baseUrl}/search_study?study_id=${study_id}`;

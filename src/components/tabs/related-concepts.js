@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
+import { Debug } from 'debugger';
 import { Box } from '@components/box';
-import { Link } from '@components/link';
+import { Stack } from '@components/stack';
+import { Accordion } from '@components/accordion';
+import { CopyButton } from '@components/copy-button';
 
 export const RelatedConcepts = ({ concepts = [] }) => {
   if (!concepts.length) {
@@ -8,16 +11,19 @@ export const RelatedConcepts = ({ concepts = [] }) => {
   }
 
   return (
-    <Box id="concepts-list">
+    <Box id="results">
       {concepts.map(concept => (
-        <Box
-          key={`concept-${concept.id}`}
-          className="result-card"
-        >
-          <strong>{concept.name}</strong><br />
-          <Link to={concept.e_link}>{concept.id}</Link><br />
-          {concept.description}
-        </Box>
+        <Accordion key={`concept-${concept._id}`} title={ concept._source.name }>
+          <Box noBorder>
+            <Stack>
+              <span><strong>ID:</strong> {concept._id}</span>
+              <CopyButton text={concept._id} />
+            </Stack>
+            <br />
+            <strong>Description:</strong>&nbsp;{concept._source.description}
+          </Box>
+          <Debug data={ concept } />
+        </Accordion>
       ))}
     </Box>
   );

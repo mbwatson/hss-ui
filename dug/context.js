@@ -54,7 +54,7 @@ export const DugProvider = ({
 
   const searchConcepts = async () => {
     const query = extractQuery(inputRef);
-    return query ? handleRequest(fetchConcepts, { query, page: 1, pageSize: 20 }) : [];
+    return query ? handleRequest(fetchConcepts, { query, page: 1, pageSize: 100 }) : [];
   };
 
   const searchKg = async () => {
