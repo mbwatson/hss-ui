@@ -1,11 +1,9 @@
+import { use } from 'react';
 import PropTypes from 'prop-types';
-import { useDug } from 'dug';
+import { DugContext } from 'dug';
 
 export const SemanticSearchForm = ({ submitHandler }) => {
-  const {
-    inputRef,
-    loading,
-  } = useDug();
+  const { inputRef } = use(DugContext);
 
   return (
     <form id="search-form">
@@ -17,7 +15,6 @@ export const SemanticSearchForm = ({ submitHandler }) => {
       <button
         className="box"
         onClick={submitHandler}
-        disabled={loading} // Button is disabled when loading
       >Search</button>
     </form>
   )

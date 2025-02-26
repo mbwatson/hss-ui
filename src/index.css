@@ -165,7 +165,9 @@ summary {
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
-    .accordion__open-indicator {}
+    .accordion__open-indicator {
+      font-family: monospace;
+    }
   }
   .accordion__details {
     border-top-width: 0;

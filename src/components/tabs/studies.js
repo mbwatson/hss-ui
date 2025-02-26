@@ -1,10 +1,8 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Debug } from 'debugger';
-import { useDug } from 'dug';
-import { Box } from '@components/box';
-import { Stack } from '@components/stack';
-import { Accordion } from '@components/accordion';
+import { DugContext } from 'dug';
+import { Accordion, Box, Stack } from '@components/layout';
 import { Link } from '@components/link';
 import { Tag } from '@components/tag';
 import { CopyButton } from '@components/copy-button';
@@ -13,7 +11,7 @@ import { getDomain } from '@util';
 //
 
 const StudyCard = ({ study }) => {
-  const { findStudy } = useDug();
+  const { findStudy } = use(DugContext);
   const [details, setDetails] = useState(null);
 
   const getDetails = async () => {

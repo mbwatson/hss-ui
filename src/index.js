@@ -1,6 +1,7 @@
 import { App } from './app'
 import { createRoot } from 'react-dom/client'
 import { DugProvider } from 'dug';
+import { DebugContextProvider } from 'debugger';
 
 import './index.css'
 
@@ -9,7 +10,9 @@ const root = createRoot(container)
 
 const ProvisionedApp = () => (
   <DugProvider baseUrl="https://heal.renci.org/search-api/">
-    <App />
+    <DebugContextProvider>
+      <App />
+    </DebugContextProvider>
   </DugProvider>
 )
 

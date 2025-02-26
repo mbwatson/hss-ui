@@ -1,0 +1,21 @@
+.debug-toggler {
+  border-radius: 0;
+  border: 1px solid #ccc;
+  font-size: 9pt;
+  font-family: monospace;
+  letter-spacing: 1px;
+  text-shadow: none;
+  color: slategrey;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  filter: opacity(0.5);
+  transition: filter 250ms;
+  &:hover {
+    filter: opacity(1.0);
+  }
+  &.active {
+    filter: opacity(1.0);
+  }
+}

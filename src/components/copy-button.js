@@ -17,7 +17,7 @@ export const CopyButton = ({
     setCopied(true);
   };
   useEffect(() => {
-    const alertTimeout = setTimeout(() => setCopied(false), 3000)
+    const alertTimeout = setTimeout(() => setCopied(false), 2000)
     return () => clearTimeout(alertTimeout)
   }, [copied])
   return (

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box } from '@components/box';
+import { Box } from '@components/layout';
 
 export const Accordion = ({ title, children, onOpen = () => {} }) => {
   const [open, setOpen] = useState(false);

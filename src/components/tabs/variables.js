@@ -2,10 +2,8 @@ import { Fragment, useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Debug } from 'debugger';
 import { useWindowWidth } from '@hooks';
-import { Box } from '@components/box';
-import { Stack } from '@components/stack';
+import { Accordion, Box, Stack } from '@components/layout';
 import { Link } from '@components/link';
-import { Accordion } from '@components/accordion';
 import { CopyButton } from '@components/copy-button';
 import { getDomain } from '@util';
 
@@ -104,9 +102,14 @@ const VariablesForDesktop = ({ variables = [] }) => {
       
       <h2 style={{ marginTop: 0 }}>{ activeVariable.name }</h2>
       
-      <Stack>
-        <span><strong>ID:</strong> { activeVariable.id }</span>
-        <CopyButton text={activeVariable.id} />
+      <Stack justify="space-between">
+        <Stack>
+          <strong>ID:</strong> { activeVariable.id }
+          <CopyButton text={activeVariable.id} />
+        </Stack>
+        <div>
+          <Link to={activeVariable.e_link}>{getDomain(activeVariable.e_link)}</Link><br />
+        </div>
       </Stack>
       
       <br />
@@ -118,7 +121,7 @@ const VariablesForDesktop = ({ variables = [] }) => {
   ), [activeVariable]);
 
   return (
-    <Box id="results" style={{ flexDirection: 'row' }}>
+    <Stack row box id="results">
       <Box id="variables-list">
         <VariableFilters />
         <VariablesList />
@@ -128,7 +131,7 @@ const VariablesForDesktop = ({ variables = [] }) => {
           ? <ActiveVariableDetails />
           : <Instructions /> }
       </Box>
-    </Box>
+    </Stack>
   );
 };
 

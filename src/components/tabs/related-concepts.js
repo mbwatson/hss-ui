@@ -1,8 +1,6 @@
 import PropTypes from 'prop-types';
 import { Debug } from 'debugger';
-import { Box } from '@components/box';
-import { Stack } from '@components/stack';
-import { Accordion } from '@components/accordion';
+import { Accordion, Box, Stack } from '@components/layout';
 import { CopyButton } from '@components/copy-button';
 
 export const RelatedConcepts = ({ concepts = [] }) => {

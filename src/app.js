@@ -1,20 +1,22 @@
-import { useState } from 'react';
-import { useDug } from 'dug';
+import { use, useState } from 'react';
+import { DugContext } from 'dug';
+import { useDebugger } from 'debugger';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { SemanticSearchForm } from '@components/form';
 import { SearchSuggestions } from '@components/suggestions';
-import { Box } from '@components/box';
+import { Box } from '@components/layout';
 import { Studies, Variables, RelatedConcepts } from '@components/tabs';
 
 //
 
 export const App = () => {
-  const { inputRef, searchConcepts, searchStudies } = useDug();
+  const { inputRef, searchConcepts, searchStudies } = use(DugContext);
   const [studies, setStudies] = useState({});
   const [cdes, setCdes] = useState({});
   const [variables, setVariables] = useState([]);
   const [concepts, setConcepts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { DebugToggler } = useDebugger();
 
   const handleClickSearch = async event => {
     event.preventDefault();
@@ -22,25 +24,23 @@ export const App = () => {
 
     try {
       const results = await searchStudies();
-      if (!results) return;
 
-      const groups = { cde: {}, nonCde: {}, variables: [] };
+      // fetch and store studies, CDEs, and variables
+      const groups = { cdes: {}, studies: {}, variables: [] };
       Object.entries(results).forEach(([key, resultsList]) => {
         resultsList.forEach(result => groups.variables.push(...result.elements));
         if (key.toLowerCase().includes('cde')) {
-          groups.cde[key] = resultsList;
+          groups.cdes[key] = resultsList;
         } else {
-          groups.nonCde[key] = resultsList;
+          groups.studies[key] = resultsList;
         }
       });
-
-      setCdes(groups.cde);
-      setStudies(groups.nonCde);
+      setCdes(groups.cdes);
+      setStudies(groups.studies);
       setVariables(groups.variables);
 
+      // and now fetch and store related concepts
       const conceptResults = await searchConcepts();
-      if (!conceptResults) return;
-
       setConcepts(conceptResults);
     } catch (error) {
       console.error('Error fetching studies:', error);
@@ -57,7 +57,7 @@ export const App = () => {
   return (
     <main>
       <h1 style={{ marginBottom: 0 }}>
-        Semantic Search
+        Semantic Search <DebugToggler />
       </h1>
 
       {/* search form */}
