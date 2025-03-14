@@ -22,12 +22,16 @@ const StudyCard = ({ study }) => {
 
   return (
     <Accordion title={study.c_name} onOpen={ getDetails }>
-      {study.c_id && (
+      {study.c_id ? (
         <Stack box noBorder justify="space-between">
           <Stack>
             <strong>ID:</strong> {study.c_id} <CopyButton text={study.c_id} />
           </Stack>
           <Link to={study.c_link}>{getDomain(study.c_link)}</Link>
+        </Stack>
+      ) : (
+        <Stack box noBorder justify="space-between">
+          <span><strong>ID:</strong> Unknown</span>
         </Stack>
       )}
       <Debug data={ details ? { study, details } : 'Loading...' } />
